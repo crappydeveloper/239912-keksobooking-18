@@ -24,33 +24,39 @@
   }
 }
 */
+var map = document.querySelector(".map");
+map.classList.remove("map--faded");
 
 function createArray() {
   var mockArray = [];
-  var mapWidth = document.querySelector(".map").offsetWidth;
+  var mapWidth = map.offsetWidth;
+  var types = ["palace", "flat", "house", "bungalo"];
+
+  function getRandomItems(arr) {
+    return Math.floor(Math.random() * arr.length)
+  }
 
   function getFeatures() {
     var chosenFeatures = [];
     var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
-    var randomValue = Math.floor(Math.random() * features.length);
 
-    for (var i = 0; i < randomValue; i++) {
+    for (var i = 0; i < 8; i++) {
       chosenFeatures.push(features[i]);
     }
 
     return chosenFeatures;
   }
 
-  for (var i = 1; i < 8; i++) {
+  for (var i = 1; i <= 8; i++) {
     mockArray.push({
       author: {
         avatar: "img/avatars/user0" + i + ".png"
       },
       offer: {
         title: "Мое предложение",
-        address: "600, 350",
+        address: location.x + "," + location.y,
         price: 9876,
-        type: ["palace", "flat", "house", "bungalo"][Math.floor(Math.random() * 4)],
+        type: types[getRandomItems(types)],
         rooms: i,
         guests: i - 1,
         checkin: "13:00",
