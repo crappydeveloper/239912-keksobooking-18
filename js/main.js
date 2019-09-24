@@ -34,10 +34,10 @@ function createArray() {
         avatar: "img/avatars/user0" + i + ".png"
       },
       offer: {
-        title: "Предлагаю",
+        title: "Мое предложение",
         address: "600, 350",
         price: 9876,
-        "type": строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo
+        type: ["palace", "flat", "house", "bungalo"][Math.floor(Math.random() * 4)],
         rooms: i,
         guests: i - 1,
         checkin: "13:00",
