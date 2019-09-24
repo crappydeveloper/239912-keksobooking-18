@@ -40,7 +40,7 @@ function createArray() {
     var chosenFeatures = [];
     var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < getRandomItems(features); i++) {
       chosenFeatures.push(features[i]);
     }
 
