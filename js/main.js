@@ -28,6 +28,18 @@
 function createArray() {
   var mockArray = [];
 
+  function fillArray() {
+    var chosenFeatures = [];
+    var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
+    var randomValue = Math.floor(Math.random() * features.length);
+
+    for (var i = 0; i < randomValue; i++) {
+      chosenFeatures.push(features[i]);
+    }
+
+    return chosenFeatures;
+  }
+
   for (var i = 1; i < 8; i++) {
     mockArray.push({
       author: {
@@ -42,7 +54,7 @@ function createArray() {
         guests: i - 1,
         checkin: "13:00",
         checkout: "12:00",
-        "features": массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",
+        features: fillArray(),
         description: "Строка с описанием",
         "photos": массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
       },
@@ -53,4 +65,5 @@ function createArray() {
       }
     });
   }
+  return mockArray;
 }
