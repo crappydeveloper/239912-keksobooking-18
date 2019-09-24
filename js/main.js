@@ -27,8 +27,9 @@
 
 function createArray() {
   var mockArray = [];
+  var mapWidth = document.querySelector(".map").offsetWidth;
 
-  function fillArray() {
+  function getFeatures() {
     var chosenFeatures = [];
     var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
     var randomValue = Math.floor(Math.random() * features.length);
@@ -54,13 +55,12 @@ function createArray() {
         guests: i - 1,
         checkin: "13:00",
         checkout: "12:00",
-        features: fillArray(),
+        features: getFeatures(),
         description: "Строка с описанием",
         "photos": массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
       },
-
-      "location": {
-        "x": случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
+      location: {
+        x: Math.floor(Math.random() * mapWidth),
         y: Math.random() * 500 + 130
       }
     });
