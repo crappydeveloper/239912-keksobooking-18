@@ -33,7 +33,7 @@ function createArray() {
   var types = ["palace", "flat", "house", "bungalo"];
 
   function getRandomItems(arr) {
-    return Math.floor(Math.random() * arr.length)
+    return Math.floor(Math.random() * arr.length);
   }
 
   function getFeatures() {
@@ -45,6 +45,18 @@ function createArray() {
     }
 
     return chosenFeatures;
+  }
+
+  function getPhotos() {
+    var sourcePhotosArr = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+    var photosArr = [];
+
+    photosArr.length = Math.floor(Math.random() * 10);
+
+    for (var i = 0; i < sourcePhotosArr.length - 1; i++) {
+      photosArr.push(sourcePhotosArr[i]);
+    }
+    return photosArr;
   }
 
   for (var i = 1; i <= 8; i++) {
@@ -63,7 +75,7 @@ function createArray() {
         checkout: "12:00",
         features: getFeatures(),
         description: "Строка с описанием",
-        "photos": массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
+        "photos": getPhotos(); 
       },
       location: {
         x: Math.floor(Math.random() * mapWidth),
