@@ -1,7 +1,7 @@
 var map = document.querySelector(".map");
 map.classList.remove("map--faded");
 
-function createArray() {
+function getData() {
   var mockArray = [];
   var mapWidth = map.offsetWidth;
   var types = ["palace", "flat", "house", "bungalo"];
@@ -37,9 +37,13 @@ function createArray() {
       author: {
         avatar: "img/avatars/user0" + i + ".png"
       },
+      location: {
+        x: Math.floor(Math.random() * mapWidth),
+        y: Math.random() * 500 + 130
+      },
       offer: {
         title: "Мое предложение",
-        address: location.x + "," + location.y,
+        address: location.x + ", " + location.y,
         price: 9876,
         type: types[getRandomItems(types)],
         rooms: i,
@@ -49,12 +53,29 @@ function createArray() {
         features: getFeatures(),
         description: "Строка с описанием",
         "photos": getPhotos()
-      },
-      location: {
-        x: Math.floor(Math.random() * mapWidth),
-        y: Math.random() * 500 + 130
       }
     });
   }
   return mockArray;
+}
+
+//TUT NACHINAETSYA TRET'YE ZADANIE
+
+var pinTemplate = document.querySelector("#pin")
+    .content
+    .querySelector(".map__pin");
+
+var pinData = getData();
+
+for (var i = 0; i < pinData.length; i++) {
+  //расчет позиции пина - х = left - width/2; y = top - height;
+  //ОТЛИЧИЕ conten от cloneNode???
+  var pinElement = pinTemplate.cloneNode(true);
+
+  pinElement.style.left = ;
+  pinElement.style.top = ;
+  pinElement.querySelector('img').src = pinData.author.avatar;
+  pinElement.querySelector('img').alt = pinData.offer.title;
+
+  map.appendChild(pinElement);
 }
