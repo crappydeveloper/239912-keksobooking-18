@@ -60,22 +60,25 @@ function getData() {
 }
 
 //TUT NACHINAETSYA TRET'YE ZADANIE
-
-var pinTemplate = document.querySelector("#pin")
+function generatePins() {
+  debugger;
+  var PIN_WIDTH = 50;
+  var PIN_HEIGHT = 70;
+  var pinTemplate = document.querySelector("#pin")
     .content
     .querySelector(".map__pin");
 
-var pinData = getData();
+  var pinData = getData();
 
-for (var i = 0; i < pinData.length; i++) {
-  //расчет позиции пина - х = left - width/2; y = top - height;
-  //ОТЛИЧИЕ conten от cloneNode???
-  var pinElement = pinTemplate.cloneNode(true);
+  for (var i = 0; i < pinData.length; i++) {
+    var pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.style.left = ;
-  pinElement.style.top = ;
-  pinElement.querySelector('img').src = pinData.author.avatar;
-  pinElement.querySelector('img').alt = pinData.offer.title;
+    pinElement.querySelector("img").alt = pinData[i].offer.title;
+    pinElement.querySelector("img").src = pinData[i].author.avatar;
 
-  map.appendChild(pinElement);
+    pinElement.style.left = pinData[i].location.x - PIN_WIDTH / 2 + "px";
+    pinElement.style.top = pinData[i].location.y - PIN_HEIGHT + "px";
+
+    map.appendChild(pinElement);
+  }
 }
