@@ -33,26 +33,28 @@ function getData() {
   }
 
   for (var i = 1; i <= 8; i++) {
+    var location = {
+      x: Math.floor(Math.random() * mapWidth),
+      y: Math.random() * 500 + 130
+    }
+
     mockArray.push({
       author: {
         avatar: "img/avatars/user0" + i + ".png"
       },
-      location: {
-        x: Math.floor(Math.random() * mapWidth),
-        y: Math.random() * 500 + 130
-      },
+      location: location,
       offer: {
         title: "Мое предложение",
         address: location.x + ", " + location.y,
         price: 9876,
-        type: types[getRandomItems(types)],
+        type: types[Math.floor(Math.random() * types.length)],
         rooms: i,
         guests: i - 1,
         checkin: "13:00",
         checkout: "12:00",
         features: getFeatures(),
         description: "Строка с описанием",
-        "photos": getPhotos()
+        photos: getPhotos()
       }
     });
   }
@@ -61,7 +63,6 @@ function getData() {
 
 //TUT NACHINAETSYA TRET'YE ZADANIE
 function generatePins() {
-  debugger;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var pinTemplate = document.querySelector("#pin")
@@ -75,7 +76,6 @@ function generatePins() {
 
     pinElement.querySelector("img").alt = pinData[i].offer.title;
     pinElement.querySelector("img").src = pinData[i].author.avatar;
-
     pinElement.style.left = pinData[i].location.x - PIN_WIDTH / 2 + "px";
     pinElement.style.top = pinData[i].location.y - PIN_HEIGHT + "px";
 
