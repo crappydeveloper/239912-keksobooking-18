@@ -78,7 +78,7 @@ function generatePins() {
     pinElement.querySelector("img").src = pinData[i].author.avatar;
     pinElement.style.left = pinData[i].location.x - PIN_WIDTH / 2 + "px";
     pinElement.style.top = pinData[i].location.y - PIN_HEIGHT + "px";
-
-    map.appendChild(pinElement);
   }
 }
+
+//TUT NACHINAETSYA CHETVERTOE ZADANIE
