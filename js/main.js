@@ -1,5 +1,6 @@
 var map = document.querySelector(".map");
 map.classList.remove("map--faded");
+var pinData = getData();
 
 function getData() {
   var mockArray = [];
@@ -22,14 +23,14 @@ function getData() {
   }
 
   function getPhotos() {
-    var photosArr = [];
-    var sourcePhotosArr = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+    var photos = [];
+    var sourcePhotos = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
 
-    for (var i = 0; i <= getRandomItems(sourcePhotosArr); i++) {
-      photosArr[i] = sourcePhotosArr[i];
+    for (var i = 0; i <= Math.floor(Math.random() * sourcePhotos.length); i++) {
+      photos[i] = sourcePhotos[i];
     }
 
-    return photosArr;
+    return photos;
   }
 
   for (var i = 1; i <= 8; i++) {
@@ -61,24 +62,30 @@ function getData() {
   return mockArray;
 }
 
-//TUT NACHINAETSYA TRET'YE ZADANIE
-function generatePins() {
+function generatePins(pin) {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
   var pinTemplate = document.querySelector("#pin")
     .content
     .querySelector(".map__pin");
 
-  var pinData = getData();
+  var pinElement = pinTemplate.cloneNode(true);
+  
+  pinElement.querySelector("img").alt = pin.offer.title;
+  pinElement.querySelector("img").src = pin.author.avatar;
+  pinElement.style.left = pin.location.x - PIN_WIDTH / 2 + "px";
+  pinElement.style.top = pin.location.y - PIN_HEIGHT + "px";
 
-  for (var i = 0; i < pinData.length; i++) {
-    var pinElement = pinTemplate.cloneNode(true);
-
-    pinElement.querySelector("img").alt = pinData[i].offer.title;
-    pinElement.querySelector("img").src = pinData[i].author.avatar;
-    pinElement.style.left = pinData[i].location.x - PIN_WIDTH / 2 + "px";
-    pinElement.style.top = pinData[i].location.y - PIN_HEIGHT + "px";
-  }
+  return pinElement;
 }
 
-//TUT NACHINAETSYA CHETVERTOE ZADANIE
+function renderPins() {
+  var pinArea = map.querySelector(".map__pins");
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < pinData.length; i++) {
+    fragment.appendChild(generatePins(pinData[i]));
+  }
+
+  pinArea.appendChild(fragment);
+}
