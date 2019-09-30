@@ -1,6 +1,49 @@
 var map = document.querySelector(".map");
-map.classList.remove("map--faded");
+var pin = map.querySelector(".map__pin--main");
+var typeSelect = map.querySelector("#housing-type");
+var priceSelect = map.querySelector("#housing-price");
+var roomsSelect = map.querySelector("#housing-rooms");
+var guestsSelect = map.querySelector("#housing-guests");
+var featuresFieldset = map.querySelector("#housing-features");
+
+var adForm = document.querySelector(".ad-form");
+var adFormHeaderFieldset = adForm.querySelector(".ad-form-header");
+var adFormFieldsets = adForm.querySelectorAll(".ad-form__element");
+
 var pinData = getData();
+
+typeSelect.disabled = "disabled";
+priceSelect.disabled = "disabled";
+roomsSelect.disabled = "disabled";
+guestsSelect.disabled = "disabled";
+featuresFieldset.disabled = "disabled";
+
+adFormHeaderFieldset.disabled = "disabled";
+
+(function() {
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].disabled = "disabled";
+  }
+}());
+
+//активирование/деактивирование карты по клику
+function pinInactiveClickHandler() {
+  map.classList.remove("map--faded");
+  adForm.classList.remove("ad-form--disabled");
+  typeSelect.disabled = "";
+  priceSelect.disabled = "";
+  roomsSelect.disabled = "";
+  guestsSelect.disabled = "";
+  featuresFieldset.disabled = "";
+
+  adFormHeaderFieldset.disabled = "";
+
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].disabled = "";
+  }
+};
+
+pin.addEventListener("mousedown", pinInactiveClickHandler);
 
 function getData() {
   var mockArray = [];
@@ -70,7 +113,7 @@ function generatePins(pin) {
     .querySelector(".map__pin");
 
   var pinElement = pinTemplate.cloneNode(true);
-  
+
   pinElement.querySelector("img").alt = pin.offer.title;
   pinElement.querySelector("img").src = pin.author.avatar;
   pinElement.style.left = pin.location.x - PIN_WIDTH / 2 + "px";
