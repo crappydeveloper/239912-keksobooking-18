@@ -43,15 +43,26 @@ function pinInactiveClickHandler() {
   }
 };
 
-//Нужно 3 обработчика: onload, mousedown, mousemove
-//Заполнение формы адреса после клика/переноса метки
+
+//Заполнение формы адреса после загрузки страницы
 function enterCoordinatesLoadHandler() {
+  var pinXPosition = +pin.style.left.slice(0, -2);
+  var pinYPosition = +pin.style.top.slice(0, -2);
+  var centerPinX = Math.round(pinXPosition + (pin.offsetWidth / 2));
+  var centerPinY = Math.round(pinYPosition + (pin.offsetHeight / 2));
+
+  adForm.querySelector("#address").value = centerPinX + ", " + centerPinY;
 }
-function enterCoordinatesMoveHandler() {
-}
+
 function enterCoordinatesClickHandler() {
+  var pinXPosition = +pin.style.left.slice(0, -2);
+  var pinYPosition = +pin.style.top.slice(0, -2);
+  var centerPinX = Math.round(pinXPosition + (pin.offsetWidth / 2));
+  var lowestPinY = Math.round(pinYPosition + pin.offsetHeight);
+
+  adForm.querySelector("#address").value = centerPinX + ", " + lowestPinY;
   /*
-  найти поле адреса. 
+  найти поле адреса.
   addresInput.value = высчитать координаты конца пина
   Взаимодействие с меткой приводит к заполнению поля адреса. (Для этого и есть данная ф-ия)
   В поле записаны координаты острого конца метки.
@@ -81,9 +92,11 @@ function enterCoordinatesClickHandler() {
   */
 }
 
-//window.addEventListener("load", enterCoordinatesLoadHandler);
-pin.addEventListener("mousedown", pinInactiveClickHandler);
-//pin.addEventListener("mousemove", enterCoordinatesMoveHandler);
+window.addEventListener("load", enterCoordinatesLoadHandler);
+pin.addEventListener("mousedown", function() {
+  pinInactiveClickHandler();
+  enterCoordinatesClickHandler();
+});
 
 function getData() {
   var mockArray = [];
