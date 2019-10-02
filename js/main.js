@@ -43,13 +43,20 @@ function pinInactiveClickHandler() {
   }
 };
 
+//Нужно 3 обработчика: onload, mousedown, mousemove
 //Заполнение формы адреса после клика/переноса метки
-function enterCoordinates() {
+function enterCoordinatesLoadHandler() {
+}
+function enterCoordinatesMoveHandler() {
+}
+function enterCoordinatesClickHandler() {
   /*
+  найти поле адреса. 
+  addresInput.value = высчитать координаты конца пина
   Взаимодействие с меткой приводит к заполнению поля адреса. (Для этого и есть данная ф-ия)
-  В поле записаны координатыострого конца метки.
+  В поле записаны координаты острого конца метки.
 
-  Поле адреса также должно быть заполнено сразу после открытия страницы.
+  Поле адреса также должно быть заполнено сразу после открытия страницы. ()
   Детали определения координат для поля «адрес» перечислены в техническом задании.
 
   Для определения смещения координаты относительно левого верхнего угла метки можно использовать любой способ,
@@ -74,7 +81,9 @@ function enterCoordinates() {
   */
 }
 
+//window.addEventListener("load", enterCoordinatesLoadHandler);
 pin.addEventListener("mousedown", pinInactiveClickHandler);
+//pin.addEventListener("mousemove", enterCoordinatesMoveHandler);
 
 function getData() {
   var mockArray = [];
