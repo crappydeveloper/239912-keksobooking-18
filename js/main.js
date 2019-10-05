@@ -8,7 +8,13 @@ var featuresFieldset = map.querySelector("#housing-features");
 
 var adForm = document.querySelector(".ad-form");
 var adFormHeaderFieldset = adForm.querySelector(".ad-form-header");
+var adFormCapacitySelect = adForm.querySelector("#capacity");
 var adFormFieldsets = adForm.querySelectorAll(".ad-form__element");
+
+var guests0 = adFormCapacitySelect.querySelector("option[value='0']").cloneNode(true);
+var guests1 = adFormCapacitySelect.querySelector("option[value='1']").cloneNode(true);
+var guests2 = adFormCapacitySelect.querySelector("option[value='2']").cloneNode(true);
+var guests3 = adFormCapacitySelect.querySelector("option[value='3']").cloneNode(true);
 
 var pinData = getData();
 
@@ -41,10 +47,8 @@ function pinInactiveClickHandler() {
   for (var i = 0; i < adFormFieldsets.length; i++) {
     adFormFieldsets[i].disabled = "";
   }
-};
+}
 
-
-//Заполнение формы адреса после загрузки страницы
 function enterCoordinatesLoadHandler() {
   var pinXPosition = +pin.style.left.slice(0, -2);
   var pinYPosition = +pin.style.top.slice(0, -2);
@@ -61,35 +65,28 @@ function enterCoordinatesClickHandler() {
   var lowestPinY = Math.round(pinYPosition + pin.offsetHeight);
 
   adForm.querySelector("#address").value = centerPinX + ", " + lowestPinY;
-  /*
-  найти поле адреса.
-  addresInput.value = высчитать координаты конца пина
-  Взаимодействие с меткой приводит к заполнению поля адреса. (Для этого и есть данная ф-ия)
-  В поле записаны координаты острого конца метки.
+}
 
-  Поле адреса также должно быть заполнено сразу после открытия страницы. ()
-  Детали определения координат для поля «адрес» перечислены в техническом задании.
+function checkRoomsClickHandler() {
+  var roomsSelect = adForm.querySelector("#room_number");
+  var fragment = document.createDocumentFragment();
 
-  Для определения смещения координаты относительно левого верхнего угла метки можно использовать любой способ,
-  в том числе, вычисление размеров метки. Кроме этого, можно хранить размеры метки как константу.
+  adFormCapacitySelect.innerHTML = "";
 
-  4.1. Приблизительный адрес квартиры указывается перемещением специальной метки по карте Токио.
-  Содержимое поля адреса должно соответствовать координатам метки:
-    в неактивном режиме страницы подставляются координаты центра метки;
-    при переходе страницы в активное состояние в поле адреса подставляются координаты острого конца метки;
-    при перемещении (mousemove) метки в поле адреса подставляются координаты острого конца метки
+  if (roomsSelect.value === "1") {
+    fragment.appendChild(guests1);
+  } else if (roomsSelect.value === "2") {
+    fragment.appendChild(guests1);
+    fragment.appendChild(guests2);
+  } else if (roomsSelect.value === "3") {
+    fragment.appendChild(guests1);
+    fragment.appendChild(guests2);
+    fragment.appendChild(guests3);
+  } else if (roomsSelect.value === "100") {
+    fragment.appendChild(guests0);
+  }
 
-  4.2. Формат значения поля адреса: {{x}}, {{y}}
-  Координаты не должны быть дробными. (Math.round)
-
-  4.3. Для удобства пользователей значение Y-координаты адреса должно быть ограничено интервалом от 130 до 630.
-  Значение X-координаты адреса должно быть ограничено размерами блока, в котором перемещается метка.
-  (БЛЭТ, Я ЖЕ ИХ СЧИТАЛ В Ф-ИИ)
-
-  4.4. При ограничении перемещения метки по горизонтали её острый конец должен указывать на крайнюю точку блока.
-  При выходе за границы блока часть метки скрывается. Скрытие реализовано стилями блока.
-  (Если нет св-ва overflow: hidden, то добавить через JS)
-  */
+  adFormCapacitySelect.appendChild(fragment);
 }
 
 window.addEventListener("load", enterCoordinatesLoadHandler);
@@ -97,6 +94,7 @@ pin.addEventListener("mousedown", function() {
   pinInactiveClickHandler();
   enterCoordinatesClickHandler();
 });
+adFormCapacitySelect.addEventListener("mousedown", checkRoomsClickHandler);
 
 function getData() {
   var mockArray = [];
