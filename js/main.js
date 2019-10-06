@@ -26,11 +26,9 @@ featuresFieldset.disabled = "disabled";
 
 adFormHeaderFieldset.disabled = "disabled";
 
-(function() {
-  for (var i = 0; i < adFormFieldsets.length; i++) {
-    adFormFieldsets[i].disabled = "disabled";
-  }
-}());
+for (var i = 0; i < adFormFieldsets.length; i++) {
+  adFormFieldsets[i].disabled = "disabled";
+}
 
 //активирование/деактивирование карты по клику
 function pinInactiveClickHandler() {
@@ -44,8 +42,8 @@ function pinInactiveClickHandler() {
 
   adFormHeaderFieldset.disabled = "";
 
-  for (var i = 0; i < adFormFieldsets.length; i++) {
-    adFormFieldsets[i].disabled = "";
+  for (var k = 0; k < adFormFieldsets.length; k++) {
+    adFormFieldsets[k].disabled = "";
   }
 }
 
@@ -73,17 +71,21 @@ function checkRoomsClickHandler() {
 
   adFormCapacitySelect.innerHTML = "";
 
-  if (roomsSelect.value === "1") {
-    fragment.appendChild(guests1);
-  } else if (roomsSelect.value === "2") {
-    fragment.appendChild(guests1);
-    fragment.appendChild(guests2);
-  } else if (roomsSelect.value === "3") {
-    fragment.appendChild(guests1);
-    fragment.appendChild(guests2);
-    fragment.appendChild(guests3);
-  } else if (roomsSelect.value === "100") {
-    fragment.appendChild(guests0);
+  switch (roomsSelect.value) {
+    case "3":
+      fragment.appendChild(guests3);
+      fragment.appendChild(guests2);
+      fragment.appendChild(guests1);
+      break;
+    case "2":
+      fragment.appendChild(guests2);
+      fragment.appendChild(guests1);
+      break;
+    case "1":
+      fragment.appendChild(guests1);
+      break;
+    case "100":
+      fragment.appendChild(guests0);
   }
 
   adFormCapacitySelect.appendChild(fragment);
@@ -177,8 +179,8 @@ function renderPins() {
   var pinArea = map.querySelector(".map__pins");
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < pinData.length; i++) {
-    fragment.appendChild(generatePins(pinData[i]));
+  for (var j = 0; j < pinData.length; j++) {
+    fragment.appendChild(generatePins(pinData[j]));
   }
 
   pinArea.appendChild(fragment);
