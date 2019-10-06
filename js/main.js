@@ -187,3 +187,5 @@ function renderPins() {
 
   pinArea.appendChild(fragment);
 }
+
+renderPins();
