@@ -14,8 +14,6 @@
 
 // Модуль pin.js
 (function () {
-  //var popupCloseButton = window.data.map.querySelector('.error__button');
-
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
     var PIN_HEIGHT = 70;
@@ -47,6 +45,7 @@
 
     function setListener() {
       var popup = window.data.map.querySelector('.error');
+      var popupCloseButton = popup.querySelector('.error__button');
 
       function popupEscHandler(evt) {
         var ESC_KEYCODE = 27;
@@ -56,9 +55,14 @@
         }
       }
 
+      function popupBtnCloseClickHandler() {
+        popup.remove();
+      }
+
       document.addEventListener('keydown', function (evt) {
         popupEscHandler(evt);
       })
+      popupCloseButton.addEventListener('click', popupBtnCloseClickHandler)
     }
 
     function onError() {

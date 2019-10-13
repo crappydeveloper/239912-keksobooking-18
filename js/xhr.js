@@ -20,10 +20,10 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError();
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = 4000;
 
     xhr.open('GET', url);
     xhr.send();
