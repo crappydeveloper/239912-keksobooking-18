@@ -14,6 +14,8 @@
 
 // Модуль pin.js
 (function () {
+  //var popupCloseButton = window.data.map.querySelector('.error__button');
+
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
     var PIN_HEIGHT = 70;
@@ -32,15 +34,46 @@
   }
 
   function renderPins() {
-    var pinData = window.data.mockArray;
-    var pinArea = window.data.map.querySelector('.map__pins');
-    var fragment = document.createDocumentFragment();
+    function onSuccess(data) {
+      var pinArea = window.data.map.querySelector('.map__pins');
+      var fragment = document.createDocumentFragment();
 
-    for (var j = 0; j < pinData.length; j++) {
-      fragment.appendChild(generatePins(pinData[j]));
+      for (var j = 0; j < data.length; j++) {
+        fragment.appendChild(generatePins(data[j]));
+      }
+
+      pinArea.appendChild(fragment);
     }
 
-    pinArea.appendChild(fragment);
+    function setListener() {
+      var popup = window.data.map.querySelector('.error');
+
+      function popupEscHandler(evt) {
+        var ESC_KEYCODE = 27;
+
+        if (evt.keyCode === ESC_KEYCODE) {
+          popup.remove();
+        }
+      }
+
+      document.addEventListener('keydown', function (evt) {
+        popupEscHandler(evt);
+      })
+    }
+
+    function onError() {
+      var errorTemplate = document.querySelector('#error')
+        .content
+        .querySelector('.error');
+
+      var errorElement = errorTemplate.cloneNode(true);
+      window.data.map.appendChild(errorElement);
+
+      setListener();
+    }
+
+    var htmlacademyURL = 'htsaastps://js.dump.academy/keksobooking/data';
+    window.xhr.load(htmlacademyURL, onSuccess, onError);
   }
 
   renderPins();
