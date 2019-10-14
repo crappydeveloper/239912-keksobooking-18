@@ -45,24 +45,32 @@
 
     function setListener() {
       var popup = window.data.map.querySelector('.error');
+      var popupMessage = popup.querySelector('.error__message');
       var popupCloseButton = popup.querySelector('.error__button');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
 
       function popupEscHandler(evt) {
         var ESC_KEYCODE = 27;
 
         if (evt.keyCode === ESC_KEYCODE) {
-          popup.remove();
+          closePopup();
         }
       }
 
-      function popupBtnCloseClickHandler() {
-        popup.remove();
+      function popupClickHandler(evt) {
+        if (evt.target !== popupMessage) {
+          closePopup();
+        }
       }
 
-      document.addEventListener('keydown', function (evt) {
-        popupEscHandler(evt);
-      })
-      popupCloseButton.addEventListener('click', popupBtnCloseClickHandler)
+      document.addEventListener('keydown', popupEscHandler);
+      popupCloseButton.addEventListener('click', closePopup);
+      window.addEventListener('click', popupClickHandler);
     }
 
     function onError() {
