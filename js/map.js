@@ -32,15 +32,60 @@
   }
 
   function renderPins() {
-    var pinData = window.data.mockArray;
-    var pinArea = window.data.map.querySelector('.map__pins');
-    var fragment = document.createDocumentFragment();
+    function onSuccess(data) {
+      var pinArea = window.data.map.querySelector('.map__pins');
+      var fragment = document.createDocumentFragment();
 
-    for (var j = 0; j < pinData.length; j++) {
-      fragment.appendChild(generatePins(pinData[j]));
+      for (var j = 0; j < data.length; j++) {
+        fragment.appendChild(generatePins(data[j]));
+      }
+
+      pinArea.appendChild(fragment);
     }
 
-    pinArea.appendChild(fragment);
+    function setListener() {
+      var popup = window.data.map.querySelector('.error');
+      var popupMessage = popup.querySelector('.error__message');
+      var popupCloseButton = popup.querySelector('.error__button');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
+
+      function popupEscHandler(evt) {
+        var ESC_KEYCODE = 27;
+
+        if (evt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      }
+
+      function popupClickHandler(evt) {
+        if (evt.target !== popupMessage) {
+          closePopup();
+        }
+      }
+
+      document.addEventListener('keydown', popupEscHandler);
+      popupCloseButton.addEventListener('click', closePopup);
+      window.addEventListener('click', popupClickHandler);
+    }
+
+    function onError() {
+      var errorTemplate = document.querySelector('#error')
+        .content
+        .querySelector('.error');
+
+      var errorElement = errorTemplate.cloneNode(true);
+      window.data.map.appendChild(errorElement);
+
+      setListener();
+    }
+
+    var htmlacademyURL = 'htsaastps://js.dump.academy/keksobooking/data';
+    window.xhr.load(htmlacademyURL, onSuccess, onError);
   }
 
   renderPins();
