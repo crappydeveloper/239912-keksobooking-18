@@ -46,9 +46,9 @@
     }
     filterByType();
 
-    function filterByNumber() {
+    function filterByNumber(number) {
       filteredPins = filteredByTypePins.filter(function (it, index) {
-        return index < 5;
+        return index < number;
       });
     }
     filterByNumber();
