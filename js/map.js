@@ -36,10 +36,22 @@
   function updatePins() {
     var pinArea = window.data.map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
+    var filteredByTypePins = [];
+    var filteredPins = [];
 
-    var filteredPins = pins.filter(function (it, index) {
-      return index < 5;
-    });
+    function filterByType() {
+      filteredByTypePins = pins.filter(function (it) {
+        return it.offer.type === window.form.adFormTypeSelect.value;
+      })
+    }
+    filterByType();
+
+    function filterByNumber() {
+      filteredPins = filteredByTypePins.filter(function (it, index) {
+        return index < 5;
+      });
+    }
+    filterByNumber();
 
     for (var j = 0; j < filteredPins.length; j++) {
       fragment.appendChild(generatePins(filteredPins[j]));
@@ -99,6 +111,18 @@
     window.xhr.load(htmlacademyURL, successHandler, errorHandler);
   }
 
+  function clearMap() {
+    var renderedPins = window.data.map.querySelectorAll('button[type="button"]');
+
+    renderedPins.forEach(function (it) {
+      it.remove();
+    })
+  }
+
   renderPins();
 
+  window.map = {
+    updatePins: updatePins,
+    clearMap: clearMap
+  }
 })();
