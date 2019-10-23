@@ -1,8 +1,13 @@
 'use strict';
 
 // Модуль card.js
-/*
 (function () {
+  var pinArea = window.data.map.querySelector('.map__pins');
+  var cardTemplate = document.querySelector('#card');
+      .content
+      .querySelector('.map__card');
+
+  
 
   console.log('Модуль card создан!');
 
@@ -10,7 +15,7 @@
 
   };
 })();
-*/
+
 
 // Модуль pin.js
 (function () {
