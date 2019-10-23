@@ -136,5 +136,5 @@
 
   window.form = {
     adFormTypeSelect: adFormTypeSelect
-  }
+  };
 })();

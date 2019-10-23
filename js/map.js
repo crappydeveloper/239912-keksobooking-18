@@ -42,7 +42,7 @@
     function filterByType() {
       filteredByTypePins = pins.filter(function (it) {
         return it.offer.type === window.form.adFormTypeSelect.value;
-      })
+      });
     }
     filterByType();
 
@@ -116,7 +116,7 @@
 
     renderedPins.forEach(function (it) {
       it.remove();
-    })
+    });
   }
 
   renderPins();
@@ -124,5 +124,5 @@
   window.map = {
     updatePins: updatePins,
     clearMap: clearMap
-  }
+  };
 })();
