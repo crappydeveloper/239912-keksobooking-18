@@ -13,6 +13,8 @@
 
   var adForm = document.querySelector('.ad-form');
   var adFormHeaderFieldset = adForm.querySelector('.ad-form-header');
+  var adFormTypeSelect = adForm.querySelector('#type');
+  var adFormPriceInput = adForm.querySelector('#price');
   var adFormCapacitySelect = adForm.querySelector('#capacity');
   var adFormFieldsets = adForm.querySelectorAll('.ad-form__element');
 
@@ -31,6 +33,32 @@
 
   for (var i = 0; i < adFormFieldsets.length; i++) {
     adFormFieldsets[i].disabled = 'disabled';
+  }
+
+  function typeClickHandler() {
+    var MIN_BUNGALO_PRICE = 0;
+    var MIN_FLAT_PRICE = 1000;
+    var MIN_HOUSE_PRICE = 5000;
+    var MIN_PALACE_PRICE = 10000;
+
+    switch (adFormTypeSelect.value) {
+      case 'bungalo':
+        adFormPriceInput.placeholder = MIN_BUNGALO_PRICE;
+        adFormPriceInput.min = MIN_BUNGALO_PRICE;
+        break;
+      case 'flat':
+        adFormPriceInput.placeholder = MIN_FLAT_PRICE;
+        adFormPriceInput.min = MIN_FLAT_PRICE;
+        break;
+      case 'house':
+        adFormPriceInput.placeholder = MIN_HOUSE_PRICE;
+        adFormPriceInput.min = MIN_HOUSE_PRICE;
+        break;
+      case 'palace':
+        adFormPriceInput.placeholder = MIN_PALACE_PRICE;
+        adFormPriceInput.min = MIN_PALACE_PRICE;
+        break;
+    }
   }
 
   function pinInactiveClickHandler() {
@@ -95,9 +123,18 @@
   }
 
   window.addEventListener('load', enterCoordinatesLoadHandler);
+  adFormTypeSelect.addEventListener('change', function () {
+    window.map.clearMap();
+    typeClickHandler();
+    window.map.updatePins();
+  });
   pin.addEventListener('mousedown', function () {
     pinInactiveClickHandler();
     enterCoordinatesClickHandler();
   });
   adFormCapacitySelect.addEventListener('mousedown', checkRoomsClickHandler);
+
+  window.form = {
+    adFormTypeSelect: adFormTypeSelect
+  };
 })();

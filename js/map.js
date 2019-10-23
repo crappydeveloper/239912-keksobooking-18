@@ -14,6 +14,8 @@
 
 // Модуль pin.js
 (function () {
+  var pins = [];
+
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
     var PIN_HEIGHT = 70;
@@ -31,16 +33,37 @@
     return pinElement;
   }
 
+  function updatePins() {
+    var pinArea = window.data.map.querySelector('.map__pins');
+    var fragment = document.createDocumentFragment();
+    var filteredByTypePins = [];
+    var filteredPins = [];
+
+    function filterByType() {
+      filteredByTypePins = pins.filter(function (it) {
+        return it.offer.type === window.form.adFormTypeSelect.value;
+      });
+    }
+    filterByType();
+
+    function filterByNumber(number) {
+      filteredPins = filteredByTypePins.filter(function (it, index) {
+        return index < number;
+      });
+    }
+    filterByNumber();
+
+    for (var j = 0; j < filteredPins.length; j++) {
+      fragment.appendChild(generatePins(filteredPins[j]));
+    }
+
+    pinArea.appendChild(fragment);
+  }
+
   function renderPins() {
-    function onSuccess(data) {
-      var pinArea = window.data.map.querySelector('.map__pins');
-      var fragment = document.createDocumentFragment();
-
-      for (var j = 0; j < data.length; j++) {
-        fragment.appendChild(generatePins(data[j]));
-      }
-
-      pinArea.appendChild(fragment);
+    function successHandler(data) {
+      pins = data;
+      updatePins();
     }
 
     function setListener() {
@@ -73,21 +96,33 @@
       window.addEventListener('click', popupClickHandler);
     }
 
-    function onError() {
+    function errorHandler() {
       var errorTemplate = document.querySelector('#error')
         .content
         .querySelector('.error');
 
       var errorElement = errorTemplate.cloneNode(true);
-      window.data.map.appendChild(errorElement);
 
+      window.data.map.appendChild(errorElement);
       setListener();
     }
 
-    var htmlacademyURL = 'htsaastps://js.dump.academy/keksobooking/data';
-    window.xhr.load(htmlacademyURL, onSuccess, onError);
+    var htmlacademyURL = 'https://js.dump.academy/keksobooking/data';
+    window.xhr.load(htmlacademyURL, successHandler, errorHandler);
+  }
+
+  function clearMap() {
+    var renderedPins = window.data.map.querySelectorAll('button[type="button"]');
+
+    renderedPins.forEach(function (it) {
+      it.remove();
+    });
   }
 
   renderPins();
 
+  window.map = {
+    updatePins: updatePins,
+    clearMap: clearMap
+  };
 })();

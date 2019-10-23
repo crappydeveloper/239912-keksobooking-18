@@ -2,25 +2,25 @@
 'use strict';
 
 (function () {
-  function load(url, onSuccess, onError) {
+  function load(url, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onSuccess(xhr.response);
+        successHandler(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        errorHandler('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError();
+      errorHandler();
     });
 
     xhr.addEventListener('timeout', function () {
-      onError();
+      errorHandler();
     });
 
     xhr.timeout = 4000;
