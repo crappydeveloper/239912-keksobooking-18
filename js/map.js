@@ -18,20 +18,11 @@
       'bungalo': 'Бунгало',
       'house': 'Дом',
       'palace': 'Дворец'
-    }
-
-    var nameToClass = {
-      'wifi': 'popup__feature--wifi',
-      'dishwasher': 'popup__feature--dishwasher',
-      'parking': 'popup__feature--parking',
-      'washer': 'popup__feature--washer',
-      'elevator': 'popup__feature--elevator',
-      'conditioner': 'popup__feature--conditioner'
-    }
+    };
 
     photo.style.display = 'none';
 
-    cardElement.querySelectorAll('.popup__feature').forEach(function(it) {
+    cardElement.querySelectorAll('.popup__feature').forEach(function (it) {
       it.style.display = 'none';
     });
 
@@ -44,7 +35,7 @@
 
     for (var i = 0; i < data.offer.features.length; i++) {
       for (var j = 0; j < optionsInElement.length; j++) {
-        if (optionsInElement[j].classList.contains("popup__feature--" + data.offer.features[i])) {
+        if (optionsInElement[j].classList.contains('popup__feature--' + data.offer.features[i])) {
           optionsInElement[j].style.display = 'inline-block';
         }
       }
@@ -52,7 +43,7 @@
 
     cardElement.querySelector('.popup__description').innerText = data.offer.description;
 
-    for (var i = 0; i < data.offer.photos.length; i++) {
+    for (var k = 0; k < data.offer.photos.length; k++) {
       var imageElement = photo.cloneNode(true);
       imageElement.style.display = 'inline';
       imageElement.src = data.offer.photos[i];
@@ -67,17 +58,14 @@
   function renderCards() {
     var fragment = document.createDocumentFragment();
 
-      for (var i = 0; i < window.data.mockArray.length; i++) {
-        fragment.appendChild(generateCards(window.data.mockArray[i]));
-      }
+    for (var i = 0; i < window.data.mockArray.length; i++) {
+      fragment.appendChild(generateCards(window.data.mockArray[i]));
+    }
 
-      pinArea.appendChild(fragment);
+    pinArea.appendChild(fragment);
   }
 
   renderCards();
-
-
-  console.log('Модуль card создан!');
 
   window.card = {
 
