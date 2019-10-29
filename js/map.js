@@ -95,6 +95,7 @@
   }
 
   function updatePins() {
+    debugger;
     var pinArea = window.data.map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     var filteredByTypePins = [];
@@ -112,7 +113,7 @@
         return index < number;
       });
     }
-    filterByNumber();
+    filterByNumber(5);
 
     for (var j = 0; j < filteredPins.length; j++) {
       fragment.appendChild(generatePins(filteredPins[j]));
