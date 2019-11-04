@@ -22,14 +22,6 @@
 
     cardElement.style.display = 'none';
 
-    //при нажатии на pin берем src его img
-    //перебор по массиву всех карточек - установка display:block у той, у которой src совпадает
-
-    /*
-    добавление eventListener при создании пина
-
-    */
-
     photo.style.display = 'none';
 
     cardElement.querySelectorAll('.popup__feature').forEach(function (it) {
@@ -75,7 +67,32 @@
     pinArea.appendChild(fragment);
   }
 
+  function setCardListeners() {
+    var cards = pinArea.querySelectorAll(".map__card.popup");
+    var buttonsClose = pinArea.querySelectorAll('.popup__close');
+
+    function cardEscHandler(evt) {
+      var ESC_KEYCODE = 27;
+
+      if (evt.keyCode === ESC_KEYCODE) {
+        cards.forEach(function (it) {
+          it.style.display = 'none';
+        })
+      }
+    }
+
+    function clickButtonCloseHandler(evt) {
+      evt.target.parentNode.style.display = 'none';
+    }
+
+    buttonsClose.forEach(function (it) {
+      it.addEventListener('click', clickButtonCloseHandler);
+    });
+    document.addEventListener('keydown', cardEscHandler);
+  }
+
   renderCards();
+  setCardListeners();
 
   window.card = {
 
@@ -138,15 +155,17 @@
 
       var pinsOnMap = window.data.map.querySelectorAll('.map__pin[type="button"]');
 
-      pinsOnMap.forEach(function (it) {
-        it.addEventListener('mousedown', function (evt) {
-          var cards = window.data.map.querySelectorAll('.map__card.popup');
-          cards.forEach(function (it) {
-            if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
-              it.style.display = 'block';
-            }
-          });
+      function pinClickHandler(evt) {
+        var cards = window.data.map.querySelectorAll('.map__card.popup');
+        cards.forEach(function (it) {
+          if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
+            it.style.display = 'block';
+          }
         });
+      }
+
+      pinsOnMap.forEach(function (it) {
+        it.addEventListener('click', pinClickHandler);
       });
     }
 
