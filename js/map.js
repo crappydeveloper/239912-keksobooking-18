@@ -20,6 +20,16 @@
       'palace': 'Дворец'
     };
 
+    cardElement.style.display = 'none';
+
+    //при нажатии на pin берем src его img
+    //перебор по массиву всех карточек - установка display:block у той, у которой src совпадает
+
+    /*
+    добавление eventListener при создании пина
+
+    */
+
     photo.style.display = 'none';
 
     cardElement.querySelectorAll('.popup__feature').forEach(function (it) {
@@ -95,7 +105,6 @@
   }
 
   function updatePins() {
-    debugger;
     var pinArea = window.data.map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     var filteredByTypePins = [];
@@ -126,6 +135,19 @@
     function successHandler(data) {
       pins = data;
       updatePins();
+
+      var pinsOnMap = window.data.map.querySelectorAll('.map__pin[type="button"]');
+
+      pinsOnMap.forEach(function (it) {
+        it.addEventListener('mousedown', function (evt) {
+          var cards = window.data.map.querySelectorAll('.map__card.popup');
+          cards.forEach(function (it) {
+            if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
+              it.style.display = 'block';
+            }
+          });
+        });
+      });
     }
 
     function setListener() {
