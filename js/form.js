@@ -15,6 +15,9 @@
   var adFormHeaderFieldset = adForm.querySelector('.ad-form-header');
   var adFormTypeSelect = adForm.querySelector('#type');
   var adFormPriceInput = adForm.querySelector('#price');
+  var adFormTimeInSelect = adForm.querySelector('#timein');
+  var adFormTimeOutSelect = adForm.querySelector('#timeout');
+  var adFormRoomsSelect = adForm.querySelector('#room_number');
   var adFormCapacitySelect = adForm.querySelector('#capacity');
   var adFormFieldsets = adForm.querySelectorAll('.ad-form__element');
 
@@ -95,11 +98,14 @@
     adForm.querySelector('#address').value = centerPinX + ', ' + lowestPinY;
   }
 
-  function checkRoomsClickHandler() {
-    var adFormRoomsSelect = adForm.querySelector('#room_number');
-    var fragment = document.createDocumentFragment();
+  function timeClickHandler(evt) {
+    var changableSelect = (evt.target === adFormTimeInSelect) ? adFormTimeOutSelect : adFormTimeInSelect;
 
-    adFormCapacitySelect.innerHTML = '';
+    changableSelect.value = evt.target.value;
+  }
+
+  function checkRoomsClickHandler() {
+    var fragment = document.createDocumentFragment();
 
     switch (adFormRoomsSelect.value) {
       case '3':
@@ -119,6 +125,7 @@
         break;
     }
 
+    adFormCapacitySelect.innerHTML = '';
     adFormCapacitySelect.appendChild(fragment);
   }
 
@@ -132,7 +139,9 @@
     pinInactiveClickHandler();
     enterCoordinatesClickHandler();
   });
-  adFormCapacitySelect.addEventListener('mousedown', checkRoomsClickHandler);
+  adFormTimeInSelect.addEventListener('change', timeClickHandler);
+  adFormTimeOutSelect.addEventListener('change', timeClickHandler);
+  adFormRoomsSelect.addEventListener('change', checkRoomsClickHandler);
 
   window.form = {
     adFormTypeSelect: adFormTypeSelect

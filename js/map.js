@@ -20,6 +20,8 @@
       'palace': 'Дворец'
     };
 
+    cardElement.style.display = 'none';
+
     photo.style.display = 'none';
 
     cardElement.querySelectorAll('.popup__feature').forEach(function (it) {
@@ -65,7 +67,32 @@
     pinArea.appendChild(fragment);
   }
 
+  function setCardListeners() {
+    var cards = pinArea.querySelectorAll('.map__card.popup');
+    var buttonsClose = pinArea.querySelectorAll('.popup__close');
+
+    function cardEscHandler(evt) {
+      var ESC_KEYCODE = 27;
+
+      if (evt.keyCode === ESC_KEYCODE) {
+        cards.forEach(function (it) {
+          it.style.display = 'none';
+        });
+      }
+    }
+
+    function clickButtonCloseHandler(evt) {
+      evt.target.parentNode.style.display = 'none';
+    }
+
+    buttonsClose.forEach(function (it) {
+      it.addEventListener('click', clickButtonCloseHandler);
+    });
+    document.addEventListener('keydown', cardEscHandler);
+  }
+
   renderCards();
+  setCardListeners();
 
   window.card = {
 
@@ -112,7 +139,7 @@
         return index < number;
       });
     }
-    filterByNumber();
+    filterByNumber(5);
 
     for (var j = 0; j < filteredPins.length; j++) {
       fragment.appendChild(generatePins(filteredPins[j]));
@@ -125,6 +152,21 @@
     function successHandler(data) {
       pins = data;
       updatePins();
+
+      var pinsOnMap = window.data.map.querySelectorAll('.map__pin[type="button"]');
+
+      function pinClickHandler(evt) {
+        var cards = window.data.map.querySelectorAll('.map__card.popup');
+        cards.forEach(function (it) {
+          if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
+            it.style.display = 'block';
+          }
+        });
+      }
+
+      pinsOnMap.forEach(function (it) {
+        it.addEventListener('click', pinClickHandler);
+      });
     }
 
     function setListener() {
