@@ -103,6 +103,7 @@
 // Модуль pin.js
 (function () {
   var pins = [];
+  var pin = window.data.map.querySelector('.map__pin--main');
 
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
@@ -223,6 +224,92 @@
   }
 
   renderPins();
+
+
+  // movePin
+
+  function pinInactiveClickHandler() {
+    window.data.map.classList.remove('map--faded');
+    window.form.adForm.classList.remove('ad-form--disabled');
+    window.form.typeSelect.disabled = '';
+    window.form.priceSelect.disabled = '';
+    window.form.roomsSelect.disabled = '';
+    window.form.guestsSelect.disabled = '';
+    window.form.featuresFieldset.disabled = '';
+
+    window.form.adFormHeaderFieldset.disabled = '';
+
+    for (var k = 0; k < window.form.adFormFieldsets.length; k++) {
+      window.form.adFormFieldsets[k].disabled = '';
+    }
+  }
+
+  function enterCoordinatesClickHandler() {
+    var centerPinX = Math.round(pin.offsetLeft + (pin.offsetWidth / 2));
+    var lowestPinY = Math.round(pin.offsetTop + pin.offsetHeight);
+
+    window.form.adForm.querySelector('#address').value = centerPinX + ', ' + lowestPinY;
+  }
+
+  pin.addEventListener('mousedown', function () {
+    pinInactiveClickHandler();
+    enterCoordinatesClickHandler();
+  });
+
+  pin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    function mouseMoveHandler(moveEvt) {
+      moveEvt.preventDefault();
+
+      var MIN_Y = 130;
+      var MAX_Y = 630;
+      var MAP_WIDTH = window.data.map.offsetWidth;
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      pin.style.top = (pin.offsetTop - shift.y) + 'px';
+      pin.style.left = (pin.offsetLeft - shift.x) + 'px';
+
+      if (pin.offsetLeft + pin.offsetWidth / 2 >= MAP_WIDTH) {
+        pin.style.left = MAP_WIDTH - pin.offsetWidth / 2 + 'px';
+      } else if (pin.offsetLeft <= 0 - pin.offsetWidth / 2) {
+        pin.style.left = 0 - pin.offsetWidth / 2 + 'px';
+      }
+
+      if (pin.offsetTop > MAX_Y - pin.offsetHeight) {
+        pin.style.top = MAX_Y - pin.offsetHeight + 'px';
+      } else if (pin.offsetTop < MIN_Y - pin.offsetHeight) {
+        pin.style.top = MIN_Y - pin.offsetHeight + 'px';
+      }
+
+      enterCoordinatesClickHandler();
+    }
+
+    function mouseUpHandler(upEvt) {
+      upEvt.preventDefault();
+
+      enterCoordinatesClickHandler();
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    }
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  });
 
   window.map = {
     updatePins: updatePins,

@@ -64,22 +64,6 @@
     }
   }
 
-  function pinInactiveClickHandler() {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    typeSelect.disabled = '';
-    priceSelect.disabled = '';
-    roomsSelect.disabled = '';
-    guestsSelect.disabled = '';
-    featuresFieldset.disabled = '';
-
-    adFormHeaderFieldset.disabled = '';
-
-    for (var k = 0; k < adFormFieldsets.length; k++) {
-      adFormFieldsets[k].disabled = '';
-    }
-  }
-
   function enterCoordinatesLoadHandler() {
     var pinXPosition = +pin.style.left.slice(0, -2);
     var pinYPosition = +pin.style.top.slice(0, -2);
@@ -87,15 +71,6 @@
     var centerPinY = Math.round(pinYPosition + (pin.offsetHeight / 2));
 
     adForm.querySelector('#address').value = centerPinX + ', ' + centerPinY;
-  }
-
-  function enterCoordinatesClickHandler() {
-    var pinXPosition = +pin.style.left.slice(0, -2);
-    var pinYPosition = +pin.style.top.slice(0, -2);
-    var centerPinX = Math.round(pinXPosition + (pin.offsetWidth / 2));
-    var lowestPinY = Math.round(pinYPosition + pin.offsetHeight);
-
-    adForm.querySelector('#address').value = centerPinX + ', ' + lowestPinY;
   }
 
   function timeClickHandler(evt) {
@@ -135,15 +110,19 @@
     typeClickHandler();
     window.map.updatePins();
   });
-  pin.addEventListener('mousedown', function () {
-    pinInactiveClickHandler();
-    enterCoordinatesClickHandler();
-  });
   adFormTimeInSelect.addEventListener('change', timeClickHandler);
   adFormTimeOutSelect.addEventListener('change', timeClickHandler);
   adFormRoomsSelect.addEventListener('change', checkRoomsClickHandler);
 
   window.form = {
-    adFormTypeSelect: adFormTypeSelect
+    adFormTypeSelect: adFormTypeSelect,
+    adForm: adForm,
+    typeSelect: typeSelect,
+    priceSelect: priceSelect,
+    roomsSelect: roomsSelect,
+    guestsSelect: guestsSelect,
+    featuresFieldset: featuresFieldset,
+    adFormHeaderFieldset: adFormHeaderFieldset,
+    adFormFieldsets: adFormFieldsets
   };
 })();
