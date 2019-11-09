@@ -68,7 +68,7 @@
   }
 
   function setCardListeners() {
-    var cards = pinArea.querySelectorAll(".map__card.popup");
+    var cards = pinArea.querySelectorAll('.map__card.popup');
     var buttonsClose = pinArea.querySelectorAll('.popup__close');
 
     function cardEscHandler(evt) {
@@ -77,7 +77,7 @@
       if (evt.keyCode === ESC_KEYCODE) {
         cards.forEach(function (it) {
           it.style.display = 'none';
-        })
+        });
       }
     }
 
