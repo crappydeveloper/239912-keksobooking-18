@@ -104,7 +104,33 @@
     adFormCapacitySelect.appendChild(fragment);
   }
 
+  function submitHandler(evt) {
+    evt.preventDefault();
+
+    //Также отображать template#success, который исчезает по Esc или по клику куда-нибудь
+    //errorHandler отображает template#error, который исчезает по Esc или по клику куда-нибудь
+
+    function successHandler() {
+      adForm.reset();
+      window.map.clearMap();
+      window.card.removeCards();
+    }
+
+    function errorHandler() {
+      var errorTemplate = document.querySelector('#error')
+        .content
+        .querySelector('.error');
+
+      var errorElement = errorTemplate.cloneNode(true);
+
+      window.data.map.appendChild(errorElement);
+    }
+
+    window.xhr.upload(new FormData(adForm), successHandler, errorHandler)
+  }
+
   window.addEventListener('load', enterCoordinatesLoadHandler);
+  adForm.addEventListener('submit', submitHandler);
   adFormTypeSelect.addEventListener('change', function () {
     window.map.clearMap();
     typeClickHandler();

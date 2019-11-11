@@ -67,17 +67,23 @@
     pinArea.appendChild(fragment);
   }
 
-  function setCardListeners() {
+  function removeCards() {
     var cards = pinArea.querySelectorAll('.map__card.popup');
+
+    cards.forEach(function (it) {
+      it.style.display = 'none';
+    });
+  }
+
+  function setCardListeners() {
+
     var buttonsClose = pinArea.querySelectorAll('.popup__close');
 
     function cardEscHandler(evt) {
       var ESC_KEYCODE = 27;
 
       if (evt.keyCode === ESC_KEYCODE) {
-        cards.forEach(function (it) {
-          it.style.display = 'none';
-        });
+        removeCards();
       }
     }
 
@@ -95,7 +101,7 @@
   setCardListeners();
 
   window.card = {
-
+    removeCards: removeCards
   };
 })();
 
@@ -224,7 +230,6 @@
   }
 
   renderPins();
-
 
   // movePin
 
