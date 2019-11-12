@@ -108,12 +108,42 @@
     evt.preventDefault();
 
     //Также отображать template#success, который исчезает по Esc или по клику куда-нибудь
-    //errorHandler отображает template#error, который исчезает по Esc или по клику куда-нибудь
+    //ВЫНЕСТИ ЭТУ ШТУКУ В ДРУГОЙ ФАЙЛ!!!
 
     function successHandler() {
       adForm.reset();
       window.map.clearMap();
       window.card.removeCards();
+    }
+
+    function setListener() {
+      var popup = window.data.map.querySelector('.error');
+      var popupMessage = popup.querySelector('.error__message');
+      var popupCloseButton = popup.querySelector('.error__button');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
+
+      function popupEscHandler(evt) {
+        var ESC_KEYCODE = 27;
+
+        if (evt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      }
+
+      function popupClickHandler(evt) {
+        if (evt.target !== popupMessage) {
+          closePopup();
+        }
+      }
+
+      document.addEventListener('keydown', popupEscHandler);
+      popupCloseButton.addEventListener('click', closePopup);
+      window.addEventListener('click', popupClickHandler);
     }
 
     function errorHandler() {
@@ -124,6 +154,7 @@
       var errorElement = errorTemplate.cloneNode(true);
 
       window.data.map.appendChild(errorElement);
+      setListener();
     }
 
     window.xhr.upload(new FormData(adForm), successHandler, errorHandler)
