@@ -65,10 +65,8 @@
   }
 
   function enterCoordinatesLoadHandler() {
-    var pinXPosition = +pin.style.left.slice(0, -2);
-    var pinYPosition = +pin.style.top.slice(0, -2);
-    var centerPinX = Math.round(pinXPosition + (pin.offsetWidth / 2));
-    var centerPinY = Math.round(pinYPosition + (pin.offsetHeight / 2));
+    var centerPinX = Math.round(pin.offsetLeft + (pin.offsetWidth / 2));
+    var centerPinY = Math.round(pin.offsetTop + (pin.offsetHeight / 2));
 
     adForm.querySelector('#address').value = centerPinX + ', ' + centerPinY;
   }
@@ -107,13 +105,48 @@
   function submitHandler(evt) {
     evt.preventDefault();
 
-    //Также отображать template#success, который исчезает по Esc или по клику куда-нибудь
-    //ВЫНЕСТИ ЭТУ ШТУКУ В ДРУГОЙ ФАЙЛ!!!
+    function setSuccessListener() {
+      var popup = document.querySelector('main').querySelector('.success');
+      var popupMessage = popup.querySelector('.success__message');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
+
+      function popupEscHandler(evt) {
+        var ESC_KEYCODE = 27;
+
+        if (evt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      }
+
+      function popupClickHandler(evt) {
+        if (evt.target !== popupMessage) {
+          closePopup();
+        }
+      }
+
+      document.addEventListener('keydown', popupEscHandler);
+      window.addEventListener('click', popupClickHandler);
+    }
 
     function successHandler() {
       adForm.reset();
+      window.map.movePinToDefault();
       window.map.clearMap();
       window.card.removeCards();
+
+      var successTemplate = document.querySelector('#success')
+        .content
+        .querySelector('.success');
+
+      var successElement = successTemplate.cloneNode(true);
+
+      document.querySelector('main').appendChild(successElement);
+      setSuccessListener();
     }
 
     function setListener() {

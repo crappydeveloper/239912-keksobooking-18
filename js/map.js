@@ -110,6 +110,8 @@
 (function () {
   var pins = [];
   var pin = window.data.map.querySelector('.map__pin--main');
+  var PIN_LEFT_PX = pin.style.left;
+  var PIN_TOP_PX = pin.style.top;
 
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
@@ -316,8 +318,19 @@
     document.addEventListener('mouseup', mouseUpHandler);
   });
 
+  function setMapInactive() {
+
+  }
+
+  function movePinToDefault() {
+    pin.style.left = PIN_LEFT_PX;
+    pin.style.top = PIN_TOP_PX;
+  }
+
   window.map = {
     updatePins: updatePins,
-    clearMap: clearMap
+    clearMap: clearMap,
+    setMapInactive: setMapInactive,
+    movePinToDefault: movePinToDefault
   };
 })();
