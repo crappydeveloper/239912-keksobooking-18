@@ -115,16 +115,16 @@
         window.removeEventListener('click', closePopup);
       }
 
-      function popupEscHandler(evt) {
+      function popupEscHandler(escEvt) {
         var ESC_KEYCODE = 27;
 
-        if (evt.keyCode === ESC_KEYCODE) {
+        if (escEvt.keyCode === ESC_KEYCODE) {
           closePopup();
         }
       }
 
-      function popupClickHandler(evt) {
-        if (evt.target !== popupMessage) {
+      function popupClickHandler(clickEvt) {
+        if (clickEvt.target !== popupMessage) {
           closePopup();
         }
       }
@@ -161,16 +161,16 @@
         window.removeEventListener('click', closePopup);
       }
 
-      function popupEscHandler(evt) {
+      function popupEscHandler(popupEscEvt) {
         var ESC_KEYCODE = 27;
 
-        if (evt.keyCode === ESC_KEYCODE) {
+        if (popupEscEvt.keyCode === ESC_KEYCODE) {
           closePopup();
         }
       }
 
-      function popupClickHandler(evt) {
-        if (evt.target !== popupMessage) {
+      function popupClickHandler(popupClickEvt) {
+        if (popupClickEvt.target !== popupMessage) {
           closePopup();
         }
       }
@@ -191,7 +191,7 @@
       setListener();
     }
 
-    window.xhr.upload(new FormData(adForm), successHandler, errorHandler)
+    window.xhr.upload(new FormData(adForm), successHandler, errorHandler);
   }
 
   function resetHandler(evt) {
