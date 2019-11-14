@@ -138,6 +138,7 @@
       window.map.movePinToDefault();
       window.map.clearMap();
       window.card.removeCards();
+      window.map.setPageInactive();
 
       var successTemplate = document.querySelector('#success')
         .content
@@ -193,8 +194,20 @@
     window.xhr.upload(new FormData(adForm), successHandler, errorHandler)
   }
 
+  function resetHandler(evt) {
+    evt.preventDefault();
+
+    adForm.reset();
+    window.map.movePinToDefault();
+    window.map.clearMap();
+    window.card.removeCards();
+    window.map.setPageInactive();
+    enterCoordinatesLoadHandler();
+  }
+
   window.addEventListener('load', enterCoordinatesLoadHandler);
   adForm.addEventListener('submit', submitHandler);
+  adForm.addEventListener('reset', resetHandler);
   adFormTypeSelect.addEventListener('change', function () {
     window.map.clearMap();
     typeClickHandler();

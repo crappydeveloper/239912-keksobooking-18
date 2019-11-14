@@ -318,8 +318,20 @@
     document.addEventListener('mouseup', mouseUpHandler);
   });
 
-  function setMapInactive() {
+  function setPageInactive() {
+    window.data.map.classList.add('map--faded');
+    window.form.adForm.classList.add('ad-form--disabled');
+    window.form.typeSelect.disabled = 'disabled';
+    window.form.priceSelect.disabled = 'disabled';
+    window.form.roomsSelect.disabled = 'disabled';
+    window.form.guestsSelect.disabled = 'disabled';
+    window.form.featuresFieldset.disabled = 'disabled';
 
+    window.form.adFormHeaderFieldset.disabled = 'disabled';
+
+    for (var k = 0; k < window.form.adFormFieldsets.length; k++) {
+      window.form.adFormFieldsets[k].disabled = 'disabled';
+    }
   }
 
   function movePinToDefault() {
@@ -330,7 +342,7 @@
   window.map = {
     updatePins: updatePins,
     clearMap: clearMap,
-    setMapInactive: setMapInactive,
+    setPageInactive: setPageInactive,
     movePinToDefault: movePinToDefault
   };
 })();
