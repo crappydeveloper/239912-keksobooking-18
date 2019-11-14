@@ -65,10 +65,8 @@
   }
 
   function enterCoordinatesLoadHandler() {
-    var pinXPosition = +pin.style.left.slice(0, -2);
-    var pinYPosition = +pin.style.top.slice(0, -2);
-    var centerPinX = Math.round(pinXPosition + (pin.offsetWidth / 2));
-    var centerPinY = Math.round(pinYPosition + (pin.offsetHeight / 2));
+    var centerPinX = Math.round(pin.offsetLeft + (pin.offsetWidth / 2));
+    var centerPinY = Math.round(pin.offsetTop + (pin.offsetHeight / 2));
 
     adForm.querySelector('#address').value = centerPinX + ', ' + centerPinY;
   }
@@ -104,7 +102,112 @@
     adFormCapacitySelect.appendChild(fragment);
   }
 
+  function submitHandler(evt) {
+    evt.preventDefault();
+
+    function setSuccessListener() {
+      var popup = document.querySelector('main').querySelector('.success');
+      var popupMessage = popup.querySelector('.success__message');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
+
+      function popupEscHandler(escEvt) {
+        var ESC_KEYCODE = 27;
+
+        if (escEvt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      }
+
+      function popupClickHandler(clickEvt) {
+        if (clickEvt.target !== popupMessage) {
+          closePopup();
+        }
+      }
+
+      document.addEventListener('keydown', popupEscHandler);
+      window.addEventListener('click', popupClickHandler);
+    }
+
+    function successHandler() {
+      adForm.reset();
+      window.map.movePinToDefault();
+      window.map.clearMap();
+      window.card.removeCards();
+      window.map.setPageInactive();
+
+      var successTemplate = document.querySelector('#success')
+        .content
+        .querySelector('.success');
+
+      var successElement = successTemplate.cloneNode(true);
+
+      document.querySelector('main').appendChild(successElement);
+      setSuccessListener();
+    }
+
+    function setListener() {
+      var popup = window.data.map.querySelector('.error');
+      var popupMessage = popup.querySelector('.error__message');
+      var popupCloseButton = popup.querySelector('.error__button');
+
+      function closePopup() {
+        popup.remove();
+        document.removeEventListener('keydown', popupEscHandler);
+        window.removeEventListener('click', closePopup);
+      }
+
+      function popupEscHandler(popupEscEvt) {
+        var ESC_KEYCODE = 27;
+
+        if (popupEscEvt.keyCode === ESC_KEYCODE) {
+          closePopup();
+        }
+      }
+
+      function popupClickHandler(popupClickEvt) {
+        if (popupClickEvt.target !== popupMessage) {
+          closePopup();
+        }
+      }
+
+      document.addEventListener('keydown', popupEscHandler);
+      popupCloseButton.addEventListener('click', closePopup);
+      window.addEventListener('click', popupClickHandler);
+    }
+
+    function errorHandler() {
+      var errorTemplate = document.querySelector('#error')
+        .content
+        .querySelector('.error');
+
+      var errorElement = errorTemplate.cloneNode(true);
+
+      window.data.map.appendChild(errorElement);
+      setListener();
+    }
+
+    window.xhr.upload(new FormData(adForm), successHandler, errorHandler);
+  }
+
+  function resetHandler(evt) {
+    evt.preventDefault();
+
+    adForm.reset();
+    window.map.movePinToDefault();
+    window.map.clearMap();
+    window.card.removeCards();
+    window.map.setPageInactive();
+    enterCoordinatesLoadHandler();
+  }
+
   window.addEventListener('load', enterCoordinatesLoadHandler);
+  adForm.addEventListener('submit', submitHandler);
+  adForm.addEventListener('reset', resetHandler);
   adFormTypeSelect.addEventListener('change', function () {
     window.map.clearMap();
     typeClickHandler();

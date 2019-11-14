@@ -67,17 +67,23 @@
     pinArea.appendChild(fragment);
   }
 
-  function setCardListeners() {
+  function removeCards() {
     var cards = pinArea.querySelectorAll('.map__card.popup');
+
+    cards.forEach(function (it) {
+      it.style.display = 'none';
+    });
+  }
+
+  function setCardListeners() {
+
     var buttonsClose = pinArea.querySelectorAll('.popup__close');
 
     function cardEscHandler(evt) {
       var ESC_KEYCODE = 27;
 
       if (evt.keyCode === ESC_KEYCODE) {
-        cards.forEach(function (it) {
-          it.style.display = 'none';
-        });
+        removeCards();
       }
     }
 
@@ -95,7 +101,7 @@
   setCardListeners();
 
   window.card = {
-
+    removeCards: removeCards
   };
 })();
 
@@ -104,6 +110,8 @@
 (function () {
   var pins = [];
   var pin = window.data.map.querySelector('.map__pin--main');
+  var PIN_LEFT_PX = pin.style.left;
+  var PIN_TOP_PX = pin.style.top;
 
   function generatePins(pinStyle) {
     var PIN_WIDTH = 50;
@@ -225,7 +233,6 @@
 
   renderPins();
 
-
   // movePin
 
   function pinInactiveClickHandler() {
@@ -311,8 +318,31 @@
     document.addEventListener('mouseup', mouseUpHandler);
   });
 
+  function setPageInactive() {
+    window.data.map.classList.add('map--faded');
+    window.form.adForm.classList.add('ad-form--disabled');
+    window.form.typeSelect.disabled = 'disabled';
+    window.form.priceSelect.disabled = 'disabled';
+    window.form.roomsSelect.disabled = 'disabled';
+    window.form.guestsSelect.disabled = 'disabled';
+    window.form.featuresFieldset.disabled = 'disabled';
+
+    window.form.adFormHeaderFieldset.disabled = 'disabled';
+
+    for (var k = 0; k < window.form.adFormFieldsets.length; k++) {
+      window.form.adFormFieldsets[k].disabled = 'disabled';
+    }
+  }
+
+  function movePinToDefault() {
+    pin.style.left = PIN_LEFT_PX;
+    pin.style.top = PIN_TOP_PX;
+  }
+
   window.map = {
     updatePins: updatePins,
-    clearMap: clearMap
+    clearMap: clearMap,
+    setPageInactive: setPageInactive,
+    movePinToDefault: movePinToDefault
   };
 })();
