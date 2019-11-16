@@ -166,6 +166,8 @@
 
       function pinClickHandler(evt) {
         var cards = window.data.map.querySelectorAll('.map__card.popup');
+
+        window.card.removeCards();
         cards.forEach(function (it) {
           if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
             it.style.display = 'block';
