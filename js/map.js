@@ -348,3 +348,13 @@
     movePinToDefault: movePinToDefault
   };
 })();
+
+//filters
+
+(function () {
+
+
+  window.filters = {
+
+  };
+})();
