@@ -254,8 +254,8 @@
   }
 
   function enterCoordinatesClickHandler() {
-    var centerPinX = Math.round(pin.offsetLeft + (pin.offsetWidth / 2));
-    var lowestPinY = Math.round(pin.offsetTop + pin.offsetHeight);
+    var centerPinX = Math.floor(pin.offsetLeft + (pin.offsetWidth / 2));
+    var lowestPinY = Math.floor(pin.offsetTop + pin.offsetHeight);
 
     window.form.adForm.querySelector('#address').value = centerPinX + ', ' + lowestPinY;
   }
