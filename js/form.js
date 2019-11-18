@@ -101,6 +101,7 @@
     adFormCapacitySelect.innerHTML = '';
     adFormCapacitySelect.appendChild(fragment);
   }
+  checkRoomsClickHandler();
 
   function submitHandler(evt) {
     evt.preventDefault();

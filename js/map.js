@@ -160,6 +160,7 @@
   function renderPins() {
     function successHandler(data) {
       pins = data;
+      clearMap();
       updatePins();
 
       var pinsOnMap = window.data.map.querySelectorAll('.map__pin[type="button"]');
@@ -226,7 +227,7 @@
   }
 
   function clearMap() {
-    var renderedPins = window.data.map.querySelectorAll('button[type="button"]');
+    var renderedPins = window.data.map.querySelectorAll('button[type="button"]:not(.map__pin--main)');
 
     renderedPins.forEach(function (it) {
       it.remove();
