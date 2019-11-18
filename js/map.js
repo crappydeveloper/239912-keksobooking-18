@@ -233,8 +233,6 @@
     });
   }
 
-  renderPins();
-
   // movePin
 
   function pinInactiveClickHandler() {
@@ -251,6 +249,8 @@
     for (var k = 0; k < window.form.adFormFieldsets.length; k++) {
       window.form.adFormFieldsets[k].disabled = '';
     }
+	
+	renderPins();
   }
 
   function enterCoordinatesClickHandler() {
@@ -346,15 +346,5 @@
     clearMap: clearMap,
     setPageInactive: setPageInactive,
     movePinToDefault: movePinToDefault
-  };
-})();
-
-//filters
-
-(function () {
-
-
-  window.filters = {
-
   };
 })();
