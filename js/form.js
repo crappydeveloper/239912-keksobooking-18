@@ -4,7 +4,9 @@
 (function () {
   var map = window.data.map;
 
+
   var pin = map.querySelector('.map__pin--main');
+  var mapForm = map.querySelector('.map__filters');
   var typeSelect = map.querySelector('#housing-type');
   var priceSelect = map.querySelector('#housing-price');
   var roomsSelect = map.querySelector('#housing-rooms');
@@ -101,6 +103,7 @@
     adFormCapacitySelect.innerHTML = '';
     adFormCapacitySelect.appendChild(fragment);
   }
+  checkRoomsClickHandler();
 
   function submitHandler(evt) {
     evt.preventDefault();
@@ -134,6 +137,7 @@
     }
 
     function successHandler() {
+      mapForm.reset();
       adForm.reset();
       window.map.movePinToDefault();
       window.map.clearMap();
@@ -197,6 +201,7 @@
   function resetHandler(evt) {
     evt.preventDefault();
 
+    mapForm.reset();
     adForm.reset();
     window.map.movePinToDefault();
     window.map.clearMap();
@@ -217,7 +222,14 @@
   adFormTimeOutSelect.addEventListener('change', timeClickHandler);
   adFormRoomsSelect.addEventListener('change', checkRoomsClickHandler);
 
+  typeSelect.addEventListener('change', window.map.renderPins);
+  priceSelect.addEventListener('change', window.map.renderPins);
+  roomsSelect.addEventListener('change', window.map.renderPins);
+  guestsSelect.addEventListener('change', window.map.renderPins);
+  featuresFieldset.addEventListener('change', window.map.renderPins);
+
   window.form = {
+    mapForm: mapForm,
     adFormTypeSelect: adFormTypeSelect,
     adForm: adForm,
     typeSelect: typeSelect,

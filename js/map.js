@@ -28,12 +28,41 @@
       it.style.display = 'none';
     });
 
-    cardElement.querySelector('.popup__title').innerText = data.offer.title;
-    cardElement.querySelector('.popup__text--address').innerText = data.offer.address;
-    cardElement.querySelector('.popup__text--price').innerText = data.offer.price + '₽/ночь';
-    cardElement.querySelector('.popup__type').innerText = typeToName[data.offer.type];
-    cardElement.querySelector('.popup__text--capacity').innerText = data.offer.rooms + ' комнат для ' + data.offer.guests + ' гостей';
-    cardElement.querySelector('.popup__text--time').innerText = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    if (data.offer.title) {
+      cardElement.querySelector('.popup__title').innerText = data.offer.title;
+    } else {
+      cardElement.querySelector('.popup__title').style.display = 'none';
+    }
+
+    if (data.offer.address) {
+      cardElement.querySelector('.popup__text--address').innerText = data.offer.address;
+    } else {
+      cardElement.querySelector('.popup__text--address').style.display = 'none';
+    }
+
+    if (data.offer.price) {
+      cardElement.querySelector('.popup__text--price').innerText = data.offer.price + '₽/ночь';
+    } else {
+      cardElement.querySelector('.popup__text--price').style.display = 'none';
+    }
+
+    if (data.offer.type) {
+      cardElement.querySelector('.popup__type').innerText = typeToName[data.offer.type];
+    } else {
+      cardElement.querySelector('.popup__type').style.display = 'none';
+    }
+
+    if (data.offer.rooms && data.offer.guests) {
+      cardElement.querySelector('.popup__text--capacity').innerText = data.offer.rooms + ' комнат для ' + data.offer.guests + ' гостей';
+    } else {
+      cardElement.querySelector('.popup__text--capacity').style.display = 'none';
+    }
+
+    if (data.offer.checkin && data.offer.checkout) {
+      cardElement.querySelector('.popup__text--time').innerText = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    } else {
+      cardElement.querySelector('.popup__text--time').style.display = 'none';
+    }
 
     for (var i = 0; i < data.offer.features.length; i++) {
       for (var j = 0; j < optionsInElement.length; j++) {
@@ -109,11 +138,12 @@
 // Модуль pin.js
 (function () {
   var pins = [];
+  var filteredPins = [];
   var pin = window.data.map.querySelector('.map__pin--main');
   var PIN_LEFT_PX = pin.style.left;
   var PIN_TOP_PX = pin.style.top;
 
-  function generatePins(pinStyle) {
+  function generatePins(pinStyle, number) {
     var PIN_WIDTH = 50;
     var PIN_HEIGHT = 70;
     var pinTemplate = document.querySelector('#pin')
@@ -123,6 +153,7 @@
     var pinElement = pinTemplate.cloneNode(true);
 
     pinElement.querySelector('img').alt = pinStyle.offer.title;
+    pinElement.setAttribute('data-id', number);
     pinElement.querySelector('img').src = pinStyle.author.avatar;
     pinElement.style.left = pinStyle.location.x - PIN_WIDTH / 2 + 'px';
     pinElement.style.top = pinStyle.location.y - PIN_HEIGHT + 'px';
@@ -133,25 +164,82 @@
   function updatePins() {
     var pinArea = window.data.map.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
-    var filteredByTypePins = [];
-    var filteredPins = [];
 
-    function filterByType() {
-      filteredByTypePins = pins.filter(function (it) {
-        return it.offer.type === window.form.adFormTypeSelect.value;
-      });
+    var filteredByTypePins = pins.filter(function (it) {
+      if (window.form.typeSelect.value === 'any') {
+        return true;
+      } else {
+        return it.offer.type === window.form.typeSelect.value;
+      }
+    });
+
+    var filteredByPricePins = pins.filter(function (it) {
+      return (((window.form.priceSelect.value === 'low') && (it.offer.price < 10000)) ||
+             ((window.form.priceSelect.value === 'middle') && (it.offer.price < 10000) && (it.offer.price <= 50000)) ||
+             ((window.form.priceSelect.value === 'low') && (it.offer.price < 10000)) ||
+             ((window.form.priceSelect.value === 'any')));
+    });
+
+    var filteredByRoomsPins = pins.filter(function (it) {
+      if (window.form.roomsSelect.value === 'any') {
+        return true;
+      } else {
+        return (+it.offer.rooms === +window.form.roomsSelect.value);
+      }
+    });
+
+    var filteredByGuestsPins = pins.filter(function (it) {
+      if (window.form.guestsSelect.value === 'any') {
+        return true;
+      } else {
+        return it.offer.guests >= window.form.guestsSelect.value;
+      }
+    });
+
+    var filteredByFeaturesPins = pins.filter(function (it) {
+      var features = window.form.featuresFieldset.querySelectorAll('input');
+      var unexistingFeatures = [];
+
+      for (var i = 0; i < features.length; i++) {
+        if (features[i].checked) {
+          unexistingFeatures.push(features[i].value);
+          if (~it.offer.features.indexOf(features[i].value)) {
+            unexistingFeatures.pop();
+          }
+        }
+      }
+      return unexistingFeatures.length === 0;
+    });
+
+    var shortestArr = filteredByTypePins;
+    var arrs = [filteredByTypePins, filteredByPricePins, filteredByRoomsPins, filteredByGuestsPins, filteredByFeaturesPins];
+
+    function findShortestArr() {
+      for (var i = 0; i < arrs.length; i++) {
+        if (arrs[i].length < shortestArr.length) {
+          shortestArr = arrs[i];
+        }
+      }
     }
-    filterByType();
+    findShortestArr();
+
+    var outputArr = shortestArr.filter(function (it) {
+      return ((~filteredByTypePins.indexOf(it)) &&
+          (~filteredByPricePins.indexOf(it)) &&
+          (~filteredByRoomsPins.indexOf(it)) &&
+          (~filteredByGuestsPins.indexOf(it)) &&
+          (~filteredByFeaturesPins.indexOf(it)));
+    });
 
     function filterByNumber(number) {
-      filteredPins = filteredByTypePins.filter(function (it, index) {
+      filteredPins = outputArr.filter(function (it, index) {
         return index < number;
       });
     }
     filterByNumber(5);
 
     for (var j = 0; j < filteredPins.length; j++) {
-      fragment.appendChild(generatePins(filteredPins[j]));
+      fragment.appendChild(generatePins(filteredPins[j], j));
     }
 
     pinArea.appendChild(fragment);
@@ -160,12 +248,15 @@
   function renderPins() {
     function successHandler(data) {
       pins = data;
+      clearMap();
       updatePins();
 
       var pinsOnMap = window.data.map.querySelectorAll('.map__pin[type="button"]');
 
       function pinClickHandler(evt) {
         var cards = window.data.map.querySelectorAll('.map__card.popup');
+
+        window.card.removeCards();
         cards.forEach(function (it) {
           if (it.querySelector('img').getAttribute('src') === evt.currentTarget.querySelector('img').getAttribute('src')) {
             it.style.display = 'block';
@@ -224,16 +315,12 @@
   }
 
   function clearMap() {
-    var renderedPins = window.data.map.querySelectorAll('button[type="button"]');
+    var renderedPins = window.data.map.querySelectorAll('button[type="button"]:not(.map__pin--main):not(.popup__close)');
 
     renderedPins.forEach(function (it) {
       it.remove();
     });
   }
-
-  renderPins();
-
-  // movePin
 
   function pinInactiveClickHandler() {
     window.data.map.classList.remove('map--faded');
@@ -249,11 +336,13 @@
     for (var k = 0; k < window.form.adFormFieldsets.length; k++) {
       window.form.adFormFieldsets[k].disabled = '';
     }
+
+    renderPins();
   }
 
   function enterCoordinatesClickHandler() {
-    var centerPinX = Math.round(pin.offsetLeft + (pin.offsetWidth / 2));
-    var lowestPinY = Math.round(pin.offsetTop + pin.offsetHeight);
+    var centerPinX = Math.floor(pin.offsetLeft + (pin.offsetWidth / 2));
+    var lowestPinY = Math.floor(pin.offsetTop + pin.offsetHeight);
 
     window.form.adForm.querySelector('#address').value = centerPinX + ', ' + lowestPinY;
   }
@@ -342,6 +431,8 @@
   window.map = {
     updatePins: updatePins,
     clearMap: clearMap,
+    renderPins: renderPins,
+    filteredPins: filteredPins,
     setPageInactive: setPageInactive,
     movePinToDefault: movePinToDefault
   };
